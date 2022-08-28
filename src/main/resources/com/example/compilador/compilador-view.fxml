@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.compilador.CompiladorController">
+    <top>
+        <HBox prefHeight="75.0" prefWidth="910.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button id="novo" fx:id="novo" contentDisplay="TOP" mnemonicParsing="false" onAction="#onNovoClick" prefHeight="80.0" prefWidth="113.75" text="Novo [ctrl + n]">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@./img/novo.png" />
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="abrir" onAction="#onAbrirClick" contentDisplay="TOP" mnemonicParsing="false" prefHeight="80.0" prefWidth="113.75" text="Abrir [ctrl + o]">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@./img/abrir.png" />
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="salvar" onAction="#onSalvarClick" contentDisplay="TOP" mnemonicParsing="false" prefHeight="80.0" prefWidth="113.75" text="Salvar [ctrl + s]">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@./img/salvar.png" />
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="copiar" onAction="#onCopiarClick" contentDisplay="TOP" mnemonicParsing="false" prefHeight="80.0" prefWidth="113.75" text="Copiar [ctrl + c]">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@./img/copiar.png" />
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="colar" onAction="#onColarClick" contentDisplay="TOP" mnemonicParsing="false" prefHeight="80.0" prefWidth="113.75" text="Colar [ctrl + v]">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@./img/colar.png" />
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="recortar" onAction="#onRecortarClick" contentDisplay="TOP" mnemonicParsing="false" prefHeight="80.0" prefWidth="113.75" text="Recortar [ctrl + x]">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@./img/recortar.png" />
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="compilar" onAction="#onCompilarClick" contentDisplay="TOP" mnemonicParsing="false" prefHeight="80.0" prefWidth="113.75" text="Compilar [F7]">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@./img/compilar.png" />
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="equipe" onAction="#onEquipeClick" contentDisplay="TOP" mnemonicParsing="false" prefHeight="80.0" prefWidth="113.75" text="Equipe [F1]">
+                    <graphic>
+                        <ImageView>
+                            <Image url="@./img/equipe.png" />
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </children>
+        </HBox>
+    </top>
+    <bottom>
+        <AnchorPane prefHeight="25.0" prefWidth="910.0" style="-fx-background-color: bege;" BorderPane.alignment="CENTER">
+            <children>
+                <TextField fx:id="status" editable="false" prefHeight="25.0" prefWidth="910.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+            </children></AnchorPane>
+    </bottom>
+    <center>
+        <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                    <children>
+                        <TextArea fx:id="editor" layoutX="-1.0" layoutY="-1.0" maxWidth="910.0" minWidth="910.0" prefHeight="248.0" prefWidth="0.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0" />
+                    </children></AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                    <children>
+                        <TextArea fx:id="msg" editable="false" prefHeight="248.0" prefWidth="910.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="0.0" />
+                    </children></AnchorPane>
+            </items>
+        </SplitPane>
+    </center>
+</BorderPane>
+
