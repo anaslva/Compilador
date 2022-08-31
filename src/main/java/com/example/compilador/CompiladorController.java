@@ -63,7 +63,7 @@ public class CompiladorController implements Initializable {
     public Button copiar;
     public void onCopiarClick() {
 
-        String text = editor.getSelectedText();
+        String text = editor.getText();
         ClipboardContent content = new ClipboardContent();
         content.putString(text);
         systemClipboard.setContent(content);
