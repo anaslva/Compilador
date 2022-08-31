@@ -25,7 +25,7 @@ import javafx.scene.control.Label;
 public class CompiladorController implements Initializable {
 
     File fileAtual;
-
+    Clipboard systemClipboard = Clipboard.getSystemClipboard();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
