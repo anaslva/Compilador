@@ -7,10 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import javafx.stage.FileChooser;
 
 import java.io.*;
@@ -21,10 +18,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.stage.FileChooser;
 
 public class CompiladorController implements Initializable {
 
     File fileAtual;
+    Clipboard systemClipboard = Clipboard.getSystemClipboard();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -60,15 +59,22 @@ public class CompiladorController implements Initializable {
 
     @FXML
     public Button copiar;
-    public void onCopiarClick() {
+    private final KeyCombination atalhoCopiar = new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN);
 
+    public void onCopiarClick() {
+    String text = editor.getSelectedText();
+        ClipboardContent content = new ClipboardContent();
+        content.putString(text);
+        systemClipboard.setContent(content);
     }
 
     @FXML
     public Button colar;
+    private final KeyCombination atalhoColar = new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN);
     public void onColarClick() {
 
     }
+
     @FXML
     public Button recortar;
     public void onRecortarClick() {
@@ -88,6 +94,7 @@ public class CompiladorController implements Initializable {
     public void onEquipeClick() {
         msg.setText("Ana Carolina da Silva e Lorhan Felipe Melo");
     }
+
     @FXML
     public TextArea editor;
     @FXML
@@ -107,6 +114,14 @@ public class CompiladorController implements Initializable {
 
         if(this.atalhoSalvar.match(event)){
             onSalvarClick();
+        }
+
+        if(this.atalhoCopiar.match(event)){
+            onCopiarClick();
+        }
+
+        if (this.atalhoColar.match(event)){
+            onColarClick();
         }
 
         if (event.getCode().equals(this.atalhoCompilar)) {
@@ -176,17 +191,27 @@ public class CompiladorController implements Initializable {
 
     public void saveFile() {
         try {
-            if(fileAtual != null){
+
+            if(fileAtual == null){
+
+                salvar.setOnAction((ActionEvent event) -> {
+                    FileChooser fileChooser = new FileChooser();
+
+                    FileChooser.ExtensionFilter extFilter =
+                            new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+                    fileChooser.getExtensionFilters().add(extFilter);
+
+                    //era para ser um window aqui mas joguei null
+                    File file = fileChooser.showSaveDialog(null);
+                });
+            } else {
                 FileWriter myWriter = new FileWriter(fileAtual);
                 myWriter.write(editor.getText());
                 myWriter.close();
-            } else {
-                System.out.println("não implementei ainda");
             }
-
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
 }
