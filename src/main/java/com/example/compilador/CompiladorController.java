@@ -1,4 +1,5 @@
 package com.example.compilador;
+
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,10 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import javafx.stage.FileChooser;
 
 import java.io.*;
@@ -19,8 +17,10 @@ import java.nio.file.Files;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+
 
 public class CompiladorController implements Initializable {
 
@@ -30,6 +30,7 @@ public class CompiladorController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
+
     @FXML
     public Button novo;
     private final KeyCombination atalhoNovo = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
@@ -54,7 +55,7 @@ public class CompiladorController implements Initializable {
     private final KeyCombination atalhoSalvar = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
 
     public void onSalvarClick() {
-        saveFile();
+        salvarArquivo();
         System.out.println("salvou");
     }
 
@@ -62,15 +63,23 @@ public class CompiladorController implements Initializable {
     public Button copiar;
     public void onCopiarClick() {
 
+        String text = editor.getSelectedText();
+        ClipboardContent content = new ClipboardContent();
+        content.putString(text);
+        systemClipboard.setContent(content);
+
     }
 
     @FXML
     public Button colar;
+    private final KeyCombination atalhoColar = new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN);
+
     public void onColarClick() {
 
     }
     @FXML
     public Button recortar;
+
     public void onRecortarClick() {
 
     }
@@ -78,6 +87,7 @@ public class CompiladorController implements Initializable {
     @FXML
     public Button compilar;
     private final KeyCode atalhoCompilar = KeyCode.F7;
+
     public void onCompilarClick() {
         msg.setText("Compilação de programas ainda não foi implementada");
     }
@@ -85,6 +95,7 @@ public class CompiladorController implements Initializable {
     @FXML
     public Button equipe;
     private final KeyCode atalhoEquipe = KeyCode.F11;
+
     public void onEquipeClick() {
         msg.setText("Ana Carolina da Silva e Lorhan Felipe Melo");
     }
@@ -105,8 +116,13 @@ public class CompiladorController implements Initializable {
             onAbrirClick();
         }
 
-        if(this.atalhoSalvar.match(event)){
+        if (this.atalhoSalvar.match(event)) {
             onSalvarClick();
+        }
+
+
+        if (this.atalhoColar.match(event)) {
+            onColarClick();
         }
 
         if (event.getCode().equals(this.atalhoCompilar)) {
@@ -124,7 +140,7 @@ public class CompiladorController implements Initializable {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt"));
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         File arquivoACarregar = fileChooser.showOpenDialog(null);
-        if ( arquivoACarregar != null) {
+        if (arquivoACarregar != null) {
             passarArquivoParaEditor(arquivoACarregar);
         }
     }
@@ -174,19 +190,34 @@ public class CompiladorController implements Initializable {
         carregarArquivo.run();
     }
 
-    public void saveFile() {
-        try {
-            if(fileAtual != null){
-                FileWriter myWriter = new FileWriter(fileAtual);
-                myWriter.write(editor.getText());
-                myWriter.close();
-            } else {
-                System.out.println("não implementei ainda");
+    public void salvarArquivo() {
+        if (this.fileAtual != null) {
+            salvarTexto(editor.getText(), this.fileAtual);
+        } else {
+            FileChooser fileChooser = new FileChooser();
+
+            //Set extension filter for text files
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+            fileChooser.getExtensionFilters().add(extFilter);
+
+            //Show save file dialog
+            File file = fileChooser.showSaveDialog(null);
+            this.fileAtual = file;
+            if (this.fileAtual != null) {
+                salvarTexto(editor.getText(), file);
+                status.setText(this.fileAtual.getPath());
             }
+    }
+    }
 
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public void salvarTexto(String texto, File file ){
+        try {
+            PrintWriter writer;
+            writer = new PrintWriter(file);
+            writer.println(texto);
+            writer.close();
+        } catch (IOException ex) {
+            return;
         }
     }
 }
