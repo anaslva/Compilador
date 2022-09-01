@@ -10,14 +10,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
 import javafx.stage.FileChooser;
-
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -26,9 +24,9 @@ public class CompiladorController implements Initializable {
 
     File fileAtual;
     Clipboard systemClipboard = Clipboard.getSystemClipboard();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
     }
 
     @FXML
@@ -61,13 +59,10 @@ public class CompiladorController implements Initializable {
 
     @FXML
     public Button copiar;
+    private final KeyCombination atalhoCopiar = new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN);
+
     public void onCopiarClick() {
-
-        String text = editor.getText();
-        ClipboardContent content = new ClipboardContent();
-        content.putString(text);
-        systemClipboard.setContent(content);
-
+    this.editor.copy();
     }
 
     @FXML
@@ -75,13 +70,15 @@ public class CompiladorController implements Initializable {
     private final KeyCombination atalhoColar = new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN);
 
     public void onColarClick() {
-
+    editor.paste();
     }
+
     @FXML
     public Button recortar;
+    private final KeyCombination atalhoCortar = new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN);
 
     public void onRecortarClick() {
-
+    this.editor.cut();
     }
 
     @FXML
@@ -99,6 +96,7 @@ public class CompiladorController implements Initializable {
     public void onEquipeClick() {
         msg.setText("Ana Carolina da Silva e Lorhan Felipe Melo");
     }
+
     @FXML
     public TextArea editor;
     @FXML
@@ -123,6 +121,10 @@ public class CompiladorController implements Initializable {
 
         if (this.atalhoColar.match(event)) {
             onColarClick();
+        }
+
+        if (this.atalhoCortar.match(event)) {
+            onRecortarClick();
         }
 
         if (event.getCode().equals(this.atalhoCompilar)) {
