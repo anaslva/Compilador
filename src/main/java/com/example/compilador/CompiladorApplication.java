@@ -17,8 +17,7 @@ public class CompiladorApplication extends Application {
 
         CompiladorController controller = fxmlLoader.getController();
         scene.addEventFilter(KeyEvent.KEY_RELEASED, event -> controller.gerenciarAtalhos(event));
-        //Erro esta aqui
-        //scene2 -> controller.editor.setBorder(new NumberedBorder());
+
         stage.setMinHeight(600);
         stage.setMinWidth(910);
         stage.setTitle("Interface - Compilador - FURB");

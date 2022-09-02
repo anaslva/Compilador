@@ -91,7 +91,7 @@ public class CompiladorController implements Initializable {
 
     @FXML
     public Button equipe;
-    private final KeyCode atalhoEquipe = KeyCode.F11;
+    private final KeyCode atalhoEquipe = KeyCode.F1;
 
     public void onEquipeClick() {
         msg.setText("Ana Carolina da Silva e Lorhan Felipe Melo");
@@ -138,24 +138,16 @@ public class CompiladorController implements Initializable {
     }
 
     private Task<String> carregadorDoArquivo(File arquivoCarregado) {
-        //Create a task to load the file asynchronously
         Task<String> carregarArquivo = new Task<>() {
             @Override
             protected String call() throws Exception {
                 BufferedReader reader = new BufferedReader(new FileReader(arquivoCarregado));
-                //Use Files.lines() to calculate total lines - used for progress
-                long contadorDeLinhas;
-                try (Stream<String> stream = Files.lines(arquivoCarregado.toPath())) {
-                    contadorDeLinhas = stream.count();
-                }
-                //Load in all lines one by one into a StringBuilder separated by "\n" - compatible with TextArea
                 String linha;
                 StringBuilder totalFile = new StringBuilder();
-                long linhasLidas = 0;
                 while ((linha = reader.readLine()) != null) {
                     totalFile.append(linha);
                     totalFile.append("\n");
-                    updateProgress(++linhasLidas, contadorDeLinhas);
+
                 }
                 return totalFile.toString();
             }
@@ -188,12 +180,9 @@ public class CompiladorController implements Initializable {
             salvarTexto(editor.getText(), this.fileAtual);
         } else {
             FileChooser fileChooser = new FileChooser();
-
-            //Set extension filter for text files
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
             fileChooser.getExtensionFilters().add(extFilter);
 
-            //Show save file dialog
             File file = fileChooser.showSaveDialog(null);
             this.fileAtual = file;
             if (this.fileAtual != null) {
