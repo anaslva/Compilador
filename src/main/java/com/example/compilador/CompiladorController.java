@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
@@ -13,6 +14,9 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.ResourceBundle;
+import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
 
 import java.util.stream.Stream;
 
@@ -20,8 +24,15 @@ public class CompiladorController implements Initializable {
 
     File fileAtual;
 
+    @FXML
+    VirtualizedScrollPane scroll;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        editor.setParagraphGraphicFactory(LineNumberFactory.get(editor));
+
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
     }
 
     @FXML
@@ -87,7 +98,7 @@ public class CompiladorController implements Initializable {
     }
 
     @FXML
-    public TextArea editor;
+    public CodeArea editor;
     @FXML
     public TextArea msg;
     @FXML
@@ -149,10 +160,11 @@ public class CompiladorController implements Initializable {
                 return totalFile.toString();
             }
         };
-        //If successful, update the text area, display a success message and store the loaded file reference
+
         carregarArquivo.setOnSucceeded(workerStateEvent -> {
             try {
-                editor.setText(carregarArquivo.getValue());
+                editor.clear();
+                editor.appendText(carregarArquivo.getValue());
                 status.setText(arquivoCarregado.getPath());
                 fileAtual = arquivoCarregado;
 
