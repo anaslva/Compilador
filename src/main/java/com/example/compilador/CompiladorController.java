@@ -1,5 +1,8 @@
 package com.example.compilador;
 
+import gals.LexicalError;
+import gals.Lexico;
+import gals.Token;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +26,6 @@ import java.util.stream.Stream;
 public class CompiladorController implements Initializable {
 
     File fileAtual;
-
     @FXML
     VirtualizedScrollPane scroll;
 
@@ -65,20 +67,23 @@ public class CompiladorController implements Initializable {
 
     @FXML
     public Button copiar;
+
     public void onCopiarClick() {
-    this.editor.copy();
+        this.editor.copy();
     }
 
     @FXML
     public Button colar;
+
     public void onColarClick() {
-    editor.paste();
+        editor.paste();
     }
 
     @FXML
     public Button recortar;
+
     public void onRecortarClick() {
-    this.editor.cut();
+        this.editor.cut();
     }
 
     @FXML
@@ -86,7 +91,50 @@ public class CompiladorController implements Initializable {
     private final KeyCode atalhoCompilar = KeyCode.F7;
 
     public void onCompilarClick() {
-        msg.setText("Compilação de programas ainda não foi implementada");
+        msg.clear();
+        int numeroLinha = 1;
+        String[] linhas = this.editor.getText().split("\\r?\\n");
+        Token tokenAtual = new Token(0, "", 0);
+        StringBuilder s = new StringBuilder();
+
+        try {
+
+                Lexico lexico = new Lexico();
+                lexico.setInput(new java.io.StringReader(editor.getText()));
+
+                tokenAtual = lexico.nextToken();
+
+
+                while (tokenAtual != null) {
+                    String substringEditor = editor.getText().substring(0, tokenAtual.getPosition());
+                    numeroLinha = 1;
+                    int pos = 0;
+                    while ((pos = substringEditor.indexOf("\n", pos) + 1) != 0) {
+                        numeroLinha++;
+                    }
+
+                    if(tokenAtual.getId() != 28)
+                        s.append("\n" +numeroLinha + "  " + getClasseLexema(tokenAtual.getId()) + "  " + tokenAtual.getLexeme());
+                    tokenAtual = lexico.nextToken();
+                }
+
+            msg.setText(s.toString());
+
+        } catch (LexicalError e) {
+            String errorMessage = "Erro na linha %s - %s %s";
+            if(e.getMessage().contains("cchar"))
+                errorMessage = String.format(errorMessage, numeroLinha, "", "constante char inválida");
+            else if(e.getMessage().contains(" esperado"))
+                    errorMessage = String.format(errorMessage, getLineByPosition(e.getPosition()), editor.getText().charAt(e.getPosition()), " simbolo inválido");
+            else if(e.getMessage().contains("string"))
+                errorMessage = String.format(errorMessage, numeroLinha, "", " constante string inválida ou não finalizada");
+            else if(e.getMessage().contains("bloco"))
+                errorMessage = String.format(errorMessage, numeroLinha, "", " comentário de bloco inválido ou não finalizado");
+
+            msg.appendText(errorMessage);
+        }
+
+        //msg.setText("Compilação de programas ainda não foi implementada");
     }
 
     @FXML
@@ -189,10 +237,10 @@ public class CompiladorController implements Initializable {
                 salvarTexto(editor.getText(), file);
                 status.setText(this.fileAtual.getPath());
             }
-    }
+        }
     }
 
-    public void salvarTexto(String texto, File file ){
+    public void salvarTexto(String texto, File file) {
         try {
             PrintWriter writer;
             writer = new PrintWriter(file);
@@ -201,5 +249,41 @@ public class CompiladorController implements Initializable {
         } catch (IOException ex) {
             return;
         }
+    }
+
+    private String getLineByPosition(int position) {
+        String content = editor.getText();
+        int newLineQty = 0;
+        for (int i = 0; i < content.length(); i++) {
+            if (i == position) {
+                break;
+            }
+            if (content.charAt(i) == '\n') {
+                newLineQty++;
+            }
+        }
+
+        return String.valueOf(newLineQty + 1);
+    }
+
+    private String getClasseLexema(int id) {
+        if (id ==  2 || id == 23 )
+            return "identificador";
+        if (id > 2 && id <= 22)
+            return "palavra reservada";
+        if (id == 24)
+            return "constante int";
+        if (id == 25)
+            return "constante float";
+        if (id == 26)
+            return "constante char";
+        if (id == 27)
+            return "constante string";
+        if (id == 29)
+            return null;
+        if (id > 28)
+            return "símbolo especial";
+
+        return null;
     }
 }

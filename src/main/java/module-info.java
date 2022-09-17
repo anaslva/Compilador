@@ -4,6 +4,7 @@ module com.example.compilador {
     requires java.desktop;
     requires org.fxmisc.flowless;
     requires org.fxmisc.richtext;
+    requires javafx.graphics;
 
 
     opens com.example.compilador to javafx.fxml;
