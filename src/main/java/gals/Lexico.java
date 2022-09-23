@@ -42,8 +42,6 @@ public class Lexico implements Constants
 
     public Token nextToken() throws LexicalError
     {
-
-
         if ( ! hasInput() )
             return null;
 
@@ -139,20 +137,14 @@ public class Lexico implements Constants
 
     private boolean hasInput()
     {
-        int lengh = input.length();
         return position < input.length();
     }
 
     private char nextChar()
     {
-        char p;
-        if (hasInput()){
+        if (hasInput())
             return input.charAt(position++);
-        }
-
         else
             return (char) -1;
     }
-
-
 }

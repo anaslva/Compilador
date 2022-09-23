@@ -3,9 +3,11 @@
 
 -fx-vbar-policy:always; /* Control the vertical ScrollBar (always,needed,never) */
 -fx-hbar-policy:always; /* Control the horizontal ScrollBar (always,needed,never) */
-
 }
 
+.text-area {
+    -fx-font-family: monospace
+}
 .code-area > .
     scroll-pane{
 

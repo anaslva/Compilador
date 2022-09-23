@@ -93,19 +93,22 @@ public class CompiladorController implements Initializable {
     public void onCompilarClick() {
         msg.clear();
         int numeroLinha = 1;
-        String[] linhas = this.editor.getText().split("\\r?\\n");
         Token tokenAtual = new Token(0, "", 0);
         StringBuilder s = new StringBuilder();
-
+        int maiorLength = 30;
+        int maiorPalavraLength = 11;
+        int maiorNLength = 5;
         try {
 
                 Lexico lexico = new Lexico();
                 lexico.setInput(new java.io.StringReader(editor.getText()));
 
                 tokenAtual = lexico.nextToken();
+                String format = "|%1$-10s|%2$-10s|%3$-20s|\n";
 
-
+                s.append("linha          classe                   lexema");
                 while (tokenAtual != null) {
+
                     String substringEditor = editor.getText().substring(0, tokenAtual.getPosition());
                     numeroLinha = 1;
                     int pos = 0;
@@ -113,28 +116,29 @@ public class CompiladorController implements Initializable {
                         numeroLinha++;
                     }
 
-                    if(tokenAtual.getId() != 28)
-                        s.append("\n" +numeroLinha + "  " + getClasseLexema(tokenAtual.getId()) + "  " + tokenAtual.getLexeme());
+
+
+                    s.append("\n" + numeroLinha + criarEspacos(numeroDeEspacos(5, Integer.toString(numeroLinha), 10)));
+
+                    s.append(getClasseLexema(tokenAtual.getId()) + criarEspacos(numeroDeEspacos(20, getClasseLexema(tokenAtual.getId()), 5)));
+                    s.append(tokenAtual.getLexeme());
                     tokenAtual = lexico.nextToken();
                 }
 
+            s.append("\n\n               programa compilado com sucesso");
             msg.setText(s.toString());
 
         } catch (LexicalError e) {
             String errorMessage = "Erro na linha %s - %s %s";
-            if(e.getMessage().contains("cchar"))
-                errorMessage = String.format(errorMessage, numeroLinha, "", "constante char inválida");
-            else if(e.getMessage().contains(" esperado"))
-                    errorMessage = String.format(errorMessage, getLineByPosition(e.getPosition()), editor.getText().charAt(e.getPosition()), " simbolo inválido");
-            else if(e.getMessage().contains("string"))
-                errorMessage = String.format(errorMessage, numeroLinha, "", " constante string inválida ou não finalizada");
-            else if(e.getMessage().contains("bloco"))
-                errorMessage = String.format(errorMessage, numeroLinha, "", " comentário de bloco inválido ou não finalizado");
+
+            if(e.getMessage().contains(" inválido"))
+                    errorMessage = String.format(errorMessage, getPosicaoDaLinha(e.getPosition()), editor.getText().charAt(e.getPosition()), " simbolo inválido");
+            else
+                errorMessage = String.format(errorMessage, getPosicaoDaLinha(e.getPosition()), "", e.getMessage());
 
             msg.appendText(errorMessage);
         }
 
-        //msg.setText("Compilação de programas ainda não foi implementada");
     }
 
     @FXML
@@ -144,6 +148,7 @@ public class CompiladorController implements Initializable {
     public void onEquipeClick() {
         msg.setText("Ana Carolina da Silva e Lorhan Felipe Melo");
     }
+
 
     @FXML
     public CodeArea editor;
@@ -251,39 +256,53 @@ public class CompiladorController implements Initializable {
         }
     }
 
-    private String getLineByPosition(int position) {
+    private String getPosicaoDaLinha(int position) {
         String content = editor.getText();
-        int newLineQty = 0;
+        int numLinha = 0;
         for (int i = 0; i < content.length(); i++) {
             if (i == position) {
                 break;
             }
             if (content.charAt(i) == '\n') {
-                newLineQty++;
+                numLinha++;
             }
         }
 
-        return String.valueOf(newLineQty + 1);
+        return String.valueOf(numLinha + 1);
     }
 
     private String getClasseLexema(int id) {
-        if (id ==  2 || id == 23 )
+        if (id ==  2 )
             return "identificador";
         if (id > 2 && id <= 22)
             return "palavra reservada";
-        if (id == 24)
+        if (id == 23)
             return "constante int";
-        if (id == 25)
+        if (id == 24)
             return "constante float";
-        if (id == 26)
+        if (id == 25)
             return "constante char";
-        if (id == 27)
+        if (id == 26)
             return "constante string";
-        if (id == 29)
-            return null;
-        if (id > 28)
+        if (id > 26)
             return "símbolo especial";
 
         return null;
+    }
+
+    private String criarEspacos (int numberOfSpaces)
+    {
+        StringBuilder espacos = new StringBuilder();
+
+        for (int i = 0; i < numberOfSpaces; i++) {
+            espacos.append(" ");
+        }
+
+        return espacos.toString();
+    }
+
+    int numeroDeEspacos(int maior, String palavra, int espacosDepois)
+    {
+        return maior - palavra.length() + espacosDepois;
     }
 }
