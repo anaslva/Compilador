@@ -95,17 +95,13 @@ public class CompiladorController implements Initializable {
         int numeroLinha = 1;
         Token tokenAtual = new Token(0, "", 0);
         StringBuilder s = new StringBuilder();
-        int maiorLength = 30;
-        int maiorPalavraLength = 11;
-        int maiorNLength = 5;
+
         try {
 
                 Lexico lexico = new Lexico();
                 lexico.setInput(new java.io.StringReader(editor.getText()));
 
                 tokenAtual = lexico.nextToken();
-                String format = "|%1$-10s|%2$-10s|%3$-20s|\n";
-
                 s.append("linha          classe                   lexema");
                 while (tokenAtual != null) {
 
@@ -115,8 +111,6 @@ public class CompiladorController implements Initializable {
                     while ((pos = substringEditor.indexOf("\n", pos) + 1) != 0) {
                         numeroLinha++;
                     }
-
-
 
                     s.append("\n" + numeroLinha + criarEspacos(numeroDeEspacos(5, Integer.toString(numeroLinha), 10)));
 
@@ -131,7 +125,7 @@ public class CompiladorController implements Initializable {
         } catch (LexicalError e) {
             String errorMessage = "Erro na linha %s - %s %s";
 
-            if(e.getMessage().contains(" inválido"))
+            if(e.getMessage().contains("símbolo inválido"))
                     errorMessage = String.format(errorMessage, getPosicaoDaLinha(e.getPosition()), editor.getText().charAt(e.getPosition()), " simbolo inválido");
             else
                 errorMessage = String.format(errorMessage, getPosicaoDaLinha(e.getPosition()), "", e.getMessage());
