@@ -1,8 +1,6 @@
 package com.example.compilador;
 
-import gals.LexicalError;
-import gals.Lexico;
-import gals.Token;
+import gals.*;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -99,8 +97,11 @@ public class CompiladorController implements Initializable {
         try {
 
                 Lexico lexico = new Lexico();
+                Sintatico sintatico = new Sintatico();
+                Semantico semantico = new Semantico();
                 lexico.setInput(new java.io.StringReader(editor.getText()));
 
+                sintatico.parse(lexico, semantico);
                 tokenAtual = lexico.nextToken();
                 s.append("linha          classe                   lexema");
                 while (tokenAtual != null) {
@@ -131,6 +132,12 @@ public class CompiladorController implements Initializable {
                 errorMessage = String.format(errorMessage, getPosicaoDaLinha(e.getPosition()), "", e.getMessage());
 
             msg.appendText(errorMessage);
+        } catch (SyntaticError e) {
+            msg.appendText("Erro na linha " + getPosicaoDaLinha(e.getPosition()) + " - encontrado " + (e.getToken().getLexeme().equals("$") ? "EOF" : e.getToken().getLexeme()) + " " + e.getMessage());
+        }
+        catch ( SemanticError e )
+        {
+            //Trata erros semânticos
         }
 
     }
@@ -299,4 +306,5 @@ public class CompiladorController implements Initializable {
     {
         return maior - palavra.length() + espacosDepois;
     }
+
 }
