@@ -103,7 +103,7 @@ public class CompiladorController implements Initializable {
 
                 sintatico.parse(lexico, semantico);
                 tokenAtual = lexico.nextToken();
-                s.append("linha          classe                   lexema");
+
                 while (tokenAtual != null) {
 
                     String substringEditor = editor.getText().substring(0, tokenAtual.getPosition());
@@ -120,7 +120,7 @@ public class CompiladorController implements Initializable {
                     tokenAtual = lexico.nextToken();
                 }
 
-            s.append("\n\n               programa compilado com sucesso");
+            s.append("programa compilado com sucesso");
             msg.setText(s.toString());
 
         } catch (LexicalError e) {
