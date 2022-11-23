@@ -1,4 +1,3 @@
-package gals;
 import java.util.Stack;
 
 public class Sintatico implements Constants
@@ -57,7 +56,7 @@ public class Sintatico implements Constants
             }
             else
             {
-                throw new SyntaticError(PARSER_ERROR[x], currentToken.getPosition(), getToken());
+                throw new SyntaticError(PARSER_ERROR[x], currentToken.getPosition());
             }
         }
         else if (isNonTerminal(x))
@@ -65,7 +64,7 @@ public class Sintatico implements Constants
             if (pushProduction(x, a))
                 return false;
             else
-                throw new SyntaticError(PARSER_ERROR[x], currentToken.getPosition(), getToken());
+                throw new SyntaticError(PARSER_ERROR[x], currentToken.getPosition());
         }
         else // isSemanticAction(x)
         {
@@ -104,9 +103,5 @@ public class Sintatico implements Constants
 
         while ( ! step() )
             ;
-    }
-
-    public Token getToken(){
-        return currentToken;
     }
 }
