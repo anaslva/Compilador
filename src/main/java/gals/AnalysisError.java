@@ -10,16 +10,16 @@ public class AnalysisError extends Exception
         this.position = position;
     }
 
-    public AnalysisError(String msg)
-    {
-        super(msg);
-        this.position = -1;
-    }
-
     public AnalysisError(String msg, int position, Token token) {
         super(msg);
         this.position = position;
         this.token = token;
+    }
+
+    public AnalysisError(String msg)
+    {
+        super(msg);
+        this.position = -1;
     }
 
     public int getPosition()

@@ -1,3 +1,4 @@
+
 package gals;
 public class Token
 {

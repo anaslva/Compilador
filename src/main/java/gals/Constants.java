@@ -1,3 +1,4 @@
+
 package gals;
 public interface Constants extends ScannerConstants, ParserConstants
 {
