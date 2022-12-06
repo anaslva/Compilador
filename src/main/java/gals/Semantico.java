@@ -15,11 +15,15 @@ public class Semantico implements Constants
     private String operdor = "";
     private String tipoVar = "";
 
-    //private final String CFLOAT = "float64";
-    //private final String CINT = "int64";
-    //private final String CCHAR = "char";
-    //private final String CSTRING = "string";
-    //private final String CBOOL = "bool";
+
+
+    private final String FLOAT = "float64";
+    private final String INT = "int64";
+    private final String CHAR = "char";
+    private final String STRING = "string";
+    private final String BOOL = "bool";
+
+
     private int contadorDeRotulo = 0;
     public void executeAction(int action, Token token)	throws SemanticError
     {
@@ -29,14 +33,30 @@ public class Semantico implements Constants
 
         switch (action){
             case 1:
+                verificaTipoNum();
+                codigo.append(System.lineSeparator()).append("add");
                 break;
             case 2:
+               verificaTipoNum();
+                codigo.append(System.lineSeparator()).append("sub");
                 break;
             case 3:
+                verificaTipoNum();
+                codigo.append(System.lineSeparator()).append("mul");
                 break;
             case 4:
+                verificaDivisao();
+                codigo.append(System.lineSeparator()).append("div");
                 break;
             case 5:
+                pilhaTipos.push(INT);
+                codigo.append(System.lineSeparator())
+                        .append("ldc.i8")
+                        .append(token.getLexeme())
+                        .append(System.lineSeparator())
+                        .append("conv.r8");
+
+
                 break;
             case 6:
                 break;
@@ -103,5 +123,41 @@ public class Semantico implements Constants
         }
 
         System.out.println(codigo);
-    }	
+    }
+
+    private void verificaDivisao() throws SemanticError {
+        String tipo1 = pilhaTipos.pop();
+        String tipo2 = pilhaTipos.pop();
+
+        verificaNumValido(tipo1);
+        verificaNumValido(tipo2);
+
+        if(tipo1 == tipo2){
+            pilhaTipos.push(tipo1);
+        } else {
+            throw new SemanticError("tipo(s) incompatível(is) em expressão aritmética");
+        }
+    }
+
+    private void verificaTipoNum() throws SemanticError{
+        String tipo1 = pilhaTipos.pop();
+        String tipo2 = pilhaTipos.pop();
+
+        verificaNumValido(tipo1);
+        verificaNumValido(tipo2);
+
+        if (tipo1.equals(FLOAT) || tipo2.equals(FLOAT)) {
+            pilhaTipos.push(FLOAT);
+        } else {
+            pilhaTipos.push(INT);
+        }
+    }
+
+    private void verificaNumValido(String tipo) throws SemanticError {
+        if (tipo.equals(INT) || tipo.equals(FLOAT)) {
+            pilhaTipos.push(tipo);
+        } else {
+            throw new SemanticError("tipo(s) incompatível(is) em expressão aritmética");
+        }
+    }
 }
