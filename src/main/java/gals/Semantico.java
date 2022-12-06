@@ -6,12 +6,12 @@ import java.util.Stack;
 
 public class Semantico implements Constants
 {
-    private final Stack<String> pilhaTipo = new Stack<>();
-    private final LinkedList<String> ids = new LinkedList<>();
+    private final Stack<String> pilhaTipos = new Stack<>();
+    private final LinkedList<String> listaId= new LinkedList<>();
     private final StringBuilder codigo = new StringBuilder();
-    private static final String QUEBRA_LINHA = System.lineSeparator();
-    private final HashMap<String, String> TS = new HashMap<>();
-    private final Stack<String> labelStack = new Stack<>();
+
+    private final HashMap<String, String> tabelaSimbolos = new HashMap<>();
+    private final Stack<String> pilhaRotulos = new Stack<>();
     private String operdor = "";
     private String tipoVar = "";
 
@@ -20,7 +20,7 @@ public class Semantico implements Constants
     //private final String CCHAR = "char";
     //private final String CSTRING = "string";
     //private final String CBOOL = "bool";
-    private int labelCount = 0;
+    private int contadorDeRotulo = 0;
     public void executeAction(int action, Token token)	throws SemanticError
     {
         String tipo1 = "";
