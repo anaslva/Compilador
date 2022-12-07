@@ -137,7 +137,7 @@ public class CompiladorController implements Initializable {
         }
         catch ( SemanticError e )
         {
-            //Trata erros semânticos
+            msg.appendText("Erro na linha " + getPosicaoDaLinha(e.getPosition()) + " - "  + e.getMessage());
         }
 
     }

@@ -1,4 +1,5 @@
 package gals;
+
 public interface ParserConstants
 {
     int START_SYMBOL = 47;
@@ -66,7 +67,7 @@ public interface ParserConstants
         {  30,  56,  29 },
         {  29 },
         {  30,  56,  29 },
-        {   2,  79 },
+        {   2, 115,  79 },
         {  28,  54 },
         {   0 },
         {  13 },

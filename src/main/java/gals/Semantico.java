@@ -208,6 +208,8 @@ public class Semantico implements Constants
                     tipoVar = INT;
                 } else if (token.getLexeme().equals("real")) {
                     tipoVar = FLOAT;
+                } else {
+                    tipoVar = token.getLexeme();
                 }
                 break;
             case 31:
