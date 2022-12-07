@@ -59,22 +59,58 @@ public class Semantico implements Constants
 
                 break;
             case 6:
+                pilhaTipos.push(FLOAT);
+                codigo.append(System.lineSeparator()).append("ldc.r8");
+                codigo.append(System.lineSeparator()).append(token.getLexeme());
                 break;
             case 7:
+                tipo1 = pilhaTipos.pop();
+                verificaNumValido(tipo1);
                 break;
             case 8:
+                tipo1 = pilhaTipos.pop();
+                verificaNumValido(tipo1);
+                codigo.append(System.lineSeparator()).append("ldc.i8 -1");
+                codigo.append(System.lineSeparator()).append("conv.r8");
+                codigo.append(System.lineSeparator()).append("mul");
                 break;
             case 9:
+                operdor = token.getLexeme();
                 break;
             case 10:
+                verificaDivisao();
+                if(operdor.equals(">"))
+                    codigo.append(System.lineSeparator()).append("ctg");
+                else if (operdor.equals("<"))
+                    codigo.append(System.lineSeparator()).append("ctg");
+                else if (operdor.equals("=="))
+                    codigo.append(System.lineSeparator()).append("ceq");
+                else
+                    throw new SemanticError("tipos incompatíveis em expressão relacional");
                 break;
             case 11:
+                pilhaTipos.push(BOOL);
+                codigo.append(System.lineSeparator()).append("ldc.i4.1");
                 break;
             case 12:
+                pilhaTipos.push(BOOL);
+                codigo.append(System.lineSeparator()).append("ldc.i4.0");
                 break;
             case 13:
+                verificaBool();
+                codigo.append(System.lineSeparator()).append("ldc.i4.1");
+                codigo.append(System.lineSeparator()).append("xor");
                 break;
             case 14:
+                tipo1 = pilhaTipos.pop();
+                if(tipo1.equals(INT)){
+                    codigo.append(System.lineSeparator()).append("conv.i8");
+                }
+                String tipoFormatado = String.format("(\" %S \")", tipo1);
+                codigo.append(System.lineSeparator())
+                        .append("call void [mscorlib]System.Console::Write" )
+                        .append(tipoFormatado);
+
                 break;
             case 15:
                 break;
@@ -125,6 +161,14 @@ public class Semantico implements Constants
         System.out.println(codigo);
     }
 
+    private void verificaBool() throws SemanticError {
+        String tipo = pilhaTipos.pop();
+        if(tipo.equals(BOOL)){
+            pilhaTipos.push(BOOL);
+        } else {
+            throw new SemanticError("tipo(s) incompatível(is) em expressão lógica");
+        }
+    }
     private void verificaDivisao() throws SemanticError {
         String tipo1 = pilhaTipos.pop();
         String tipo2 = pilhaTipos.pop();
