@@ -183,8 +183,17 @@ public class Semantico implements Constants
                         .append(System.lineSeparator()).append("ldstr ").append("\"").append(token.getLexeme()).append("\"");
                 break;
             case 24:
+                codigo.append(System.lineSeparator())
+                        .append("brfalse ")
+                        .append(this.criaRotulo());
                 break;
             case 25:
+                codigo.append(System.lineSeparator())
+                        .append("br ")
+                        .append(this.criaRotulo())
+                        .append(System.lineSeparator())
+                        .append(this.pilhaRotulos.pop())
+                        .append(":");
                 break;
             case 26:
                 codigo
@@ -308,5 +317,12 @@ public class Semantico implements Constants
         if (!tipo.equals(INT) && !tipo.equals(FLOAT)) {
             throw new SemanticError("tipo(s) incompatível(is) em expressão aritmética", token.getPosition());
         }
+    }
+
+    private String criaRotulo() {
+        String rotulo = "label_";
+        rotulo += this.contadorDeRotulo;
+        this.pilhaRotulos.push(rotulo);
+        return rotulo;
     }
 }
