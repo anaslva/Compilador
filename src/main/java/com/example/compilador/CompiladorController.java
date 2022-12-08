@@ -123,7 +123,7 @@ public class CompiladorController implements Initializable {
             System.out.println(semantico.getCodigo());;
             s.append("programa compilado com sucesso");
             msg.setText(s.toString());
-            salvarArquivo(semantico.getCodigo(), 2);
+            salvarTexto(semantico.getCodigo(), fileAtual, 2);
 
 
         } catch (LexicalError e) {
@@ -252,6 +252,13 @@ public class CompiladorController implements Initializable {
     public void salvarTexto(String texto, File file, int tipo) {
 
         try {
+            if(tipo == 2){
+                int index = file.getPath().lastIndexOf(".");
+                String ext = ".il";
+                String name = file.getPath().substring(0, index);
+                file = new File(name+ext);
+            }
+
             PrintWriter writer;
             writer = new PrintWriter(file);
             writer.println(texto);
