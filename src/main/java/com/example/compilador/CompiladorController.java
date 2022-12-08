@@ -59,7 +59,7 @@ public class CompiladorController implements Initializable {
     private final KeyCombination atalhoSalvar = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
 
     public void onSalvarClick() {
-        salvarArquivo();
+        salvarArquivo(editor.getText(), 1);
         System.out.println("salvou");
     }
 
@@ -120,8 +120,11 @@ public class CompiladorController implements Initializable {
                     tokenAtual = lexico.nextToken();
                 }
 
+            System.out.println(semantico.getCodigo());;
             s.append("programa compilado com sucesso");
             msg.setText(s.toString());
+            salvarArquivo(semantico.getCodigo(), 2);
+
 
         } catch (LexicalError e) {
             String errorMessage = "Erro na linha %s - %s %s";
@@ -229,24 +232,25 @@ public class CompiladorController implements Initializable {
         carregarArquivo.run();
     }
 
-    public void salvarArquivo() {
+    public void salvarArquivo(String texto, int tipo) {
         if (this.fileAtual != null) {
-            salvarTexto(editor.getText(), this.fileAtual);
+                salvarTexto(texto, this.fileAtual, tipo);
         } else {
             FileChooser fileChooser = new FileChooser();
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)","*.txt" );
             fileChooser.getExtensionFilters().add(extFilter);
 
             File file = fileChooser.showSaveDialog(null);
             this.fileAtual = file;
             if (this.fileAtual != null) {
-                salvarTexto(editor.getText(), file);
+                salvarTexto(texto, file, tipo);
                 status.setText(this.fileAtual.getPath());
             }
         }
     }
 
-    public void salvarTexto(String texto, File file) {
+    public void salvarTexto(String texto, File file, int tipo) {
+
         try {
             PrintWriter writer;
             writer = new PrintWriter(file);

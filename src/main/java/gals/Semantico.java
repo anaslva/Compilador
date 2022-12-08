@@ -112,7 +112,7 @@ public class Semantico implements Constants
                 if (tipo1.equals(INT)) {
                     codigo.append(System.lineSeparator()).append("conv.i8");
                 }
-                String tipoFormatado = String.format("(\" %S \")", tipo1);
+                String tipoFormatado = String.format("(\"%S\")", tipo1);
                 codigo.append(System.lineSeparator())
                         .append("call void [mscorlib]System.Console::Write")
                         .append(tipoFormatado);
@@ -180,7 +180,7 @@ public class Semantico implements Constants
             case 22:
                 pilhaTipos.push(CHAR);
                 codigo
-                        .append(System.lineSeparator()).append("ldstr ").append("\"").append(token.getLexeme()).append("\"");
+                        .append(System.lineSeparator()).append("ldstr ").append(token.getLexeme());
                 break;
             case 24:
                 codigo.append(System.lineSeparator())
@@ -275,8 +275,6 @@ public class Semantico implements Constants
                 listaId.clear();
                 break;
         }
-
-        System.out.println(codigo);
     }
 
     private void verificaBool(Token token) throws SemanticError {
@@ -326,5 +324,9 @@ public class Semantico implements Constants
         rotulo += this.contadorDeRotulo;
         this.pilhaRotulos.push(rotulo);
         return rotulo;
+    }
+
+    public String getCodigo() {
+        return codigo.toString();
     }
 }
