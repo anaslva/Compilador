@@ -50,8 +50,7 @@ public class Semantico implements Constants
             case 5:
                 pilhaTipos.push(INT);
                 codigo.append(System.lineSeparator())
-                        .append("ldc.i8")
-                        .append(System.lineSeparator())
+                        .append("ldc.i8 ")
                         .append(token.getLexeme())
                         .append(System.lineSeparator())
                         .append("conv.r8");
@@ -77,7 +76,7 @@ public class Semantico implements Constants
                 } else {
                     throw new SemanticError("tipo(s) incompatível(is) em expressão aritmética", token.getPosition());
                 }
-                codigo.append(System.lineSeparator()).append("ldc.i8 -1");
+                codigo.append(System.lineSeparator()).append("ldc.i8").append(-1);
                 codigo.append(System.lineSeparator()).append("conv.r8");
                 codigo.append(System.lineSeparator()).append("mul");
                 break;
@@ -325,7 +324,7 @@ public class Semantico implements Constants
     }
 
     private String criaRotulo() {
-        String rotulo = "label_" + this.contadorDeRotulo;
+        String rotulo = "l" + this.contadorDeRotulo;
         this.pilhaRotulos.push(rotulo);
         this.contadorDeRotulo++;
         return rotulo;

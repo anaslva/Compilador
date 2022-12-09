@@ -22,11 +22,11 @@ conv.r8
 ldc.i8 1
 conv.r8
 clt
-brfalse L1
+brfalse l1
 ldstr "valor inválido"
 call void [mscorlib]System.Console::Write(string)
-br L2
-L1:
+br l2
+l1:
 ldloc lado
 conv.r8
 ldloc lado
@@ -34,10 +34,9 @@ conv.r8
 mul
 conv.i8
 call void [mscorlib]System.Console::Write(int64)
-L2:
+l2:
 call string [mscorlib]System.Console::ReadLine()
 call int64 [mscorlib]System.Int64::Parse(string)
-stloc lado
 ret
 }
 }
