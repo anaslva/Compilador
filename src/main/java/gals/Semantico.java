@@ -86,7 +86,7 @@ public class Semantico implements Constants
             case 10:
                 verificaDivisao(token);
                 if (operdor.equals(">"))
-                    codigo.append(System.lineSeparator()).append("ctg");
+                    codigo.append(System.lineSeparator()).append("cgt");
                 else if (operdor.equals("<"))
                     codigo.append(System.lineSeparator()).append("clt");
                 else if (operdor.equals("=="))
@@ -252,7 +252,7 @@ public class Semantico implements Constants
                 pilhaTipos.pop();
                 if (tipoid2.equals(INT)) {
                     codigo
-                            .append(System.lineSeparator()).append("conv.r8");
+                            .append(System.lineSeparator()).append("conv.i8");
                 }
                 codigo
                         .append(System.lineSeparator()).append("stloc ").append(id2);
