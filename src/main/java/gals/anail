@@ -37,6 +37,6 @@ call void [mscorlib]System.Console::Write(int64)
 l2:
 call string [mscorlib]System.Console::ReadLine()
 call int64 [mscorlib]System.Int64::Parse(string)
-ret
+stloc lado ret
 }
 }
