@@ -189,10 +189,10 @@ public class Semantico implements Constants
                         .append(this.criaRotulo());
                 break;
             case 25:
-                String rotuloAtual = this.pilhaRotulos.pop();
-                String rotuloNovo = this.criaRotulo();
-                this.codigo.append(System.lineSeparator()).append("br ").append(rotuloNovo);
-                this.codigo.append(System.lineSeparator()).append(rotuloAtual).append(":");
+                String rotulo1= this.pilhaRotulos.pop();
+                String rotulo2 = this.criaRotulo();
+                this.codigo.append(System.lineSeparator()).append("br ").append(rotulo2);
+                this.codigo.append(System.lineSeparator()).append(rotulo1).append(":");
                 break;
             case 26:
                 codigo
