@@ -24,7 +24,7 @@ public class Semantico implements Constants
     private final String BOOL = "bool";
 
 
-    private int contadorDeRotulo = 0;
+    private int contadorDeRotulo = 1;
     public void executeAction(int action, Token token)	throws SemanticError
     {
         String tipo1 = "";
@@ -89,7 +89,7 @@ public class Semantico implements Constants
                 if (operdor.equals(">"))
                     codigo.append(System.lineSeparator()).append("ctg");
                 else if (operdor.equals("<"))
-                    codigo.append(System.lineSeparator()).append("ctg");
+                    codigo.append(System.lineSeparator()).append("clt");
                 else if (operdor.equals("=="))
                     codigo.append(System.lineSeparator()).append("ceq");
                 else
@@ -190,20 +190,20 @@ public class Semantico implements Constants
                         .append(this.criaRotulo());
                 break;
             case 25:
-                codigo.append(System.lineSeparator())
-                        .append("br ")
-                        .append(this.criaRotulo())
-                        .append(System.lineSeparator())
-                        .append(this.pilhaRotulos.pop())
-                        .append(":");
+                String rotuloAtual = this.pilhaRotulos.pop();
+                String rotuloNovo = this.criaRotulo();
+                this.codigo.append(System.lineSeparator()).append("br ").append(rotuloNovo);
+                this.codigo.append(System.lineSeparator()).append(rotuloAtual).append(":");
                 break;
             case 26:
                 codigo
                         .append(System.lineSeparator()).append(pilhaRotulos.pop()).append(":");
                 break;
             case 27:
+                this.codigo.append(System.lineSeparator()).append(this.criaRotulo()).append(":");
                 break;
             case 28:
+                this.codigo.append(System.lineSeparator()).append("brtrue ").append(this.pilhaRotulos.pop());
                 break;
             case 30:
                 if (token.getLexeme().equals("int")) {
@@ -325,9 +325,9 @@ public class Semantico implements Constants
     }
 
     private String criaRotulo() {
-        String rotulo = "label_";
-        rotulo += this.contadorDeRotulo;
+        String rotulo = "label_" + this.contadorDeRotulo;
         this.pilhaRotulos.push(rotulo);
+        this.contadorDeRotulo++;
         return rotulo;
     }
 
