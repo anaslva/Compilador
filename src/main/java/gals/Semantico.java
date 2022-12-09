@@ -51,6 +51,7 @@ public class Semantico implements Constants
                 pilhaTipos.push(INT);
                 codigo.append(System.lineSeparator())
                         .append("ldc.i8")
+                        .append(System.lineSeparator())
                         .append(token.getLexeme())
                         .append(System.lineSeparator())
                         .append("conv.r8");
@@ -112,10 +113,11 @@ public class Semantico implements Constants
                 if (tipo1.equals(INT)) {
                     codigo.append(System.lineSeparator()).append("conv.i8");
                 }
-                String tipoFormatado = String.format("(\"%S\")", tipo1);
+
                 codigo.append(System.lineSeparator())
-                        .append("call void [mscorlib]System.Console::Write")
-                        .append(tipoFormatado);
+                        .append("call void [mscorlib]System.Console::Write(")
+                        .append(tipo1)
+                        .append(")");
 
                 break;
             case 15:
@@ -130,7 +132,7 @@ public class Semantico implements Constants
                 break;
             case 16:
                 codigo
-                        .append("ret").append(System.lineSeparator())
+                        .append(" ret").append(System.lineSeparator())
                         .append("}").append(System.lineSeparator())
                         .append("}");
                 break;
@@ -178,7 +180,7 @@ public class Semantico implements Constants
                 }
                 break;
             case 22:
-                pilhaTipos.push(CHAR);
+                pilhaTipos.push(STRING);
                 codigo
                         .append(System.lineSeparator()).append("ldstr ").append(token.getLexeme());
                 break;
@@ -206,9 +208,12 @@ public class Semantico implements Constants
             case 30:
                 if (token.getLexeme().equals("int")) {
                     tipoVar = INT;
-                } else if (token.getLexeme().equals("real")) {
+                } else if (token.getLexeme().equals("float")) {
                     tipoVar = FLOAT;
-                } else {
+                } else if(token.getLexeme().equals("boolean")){
+                    tipoVar = BOOL;
+                }
+                else {
                     tipoVar = token.getLexeme();
                 }
                 break;
@@ -258,7 +263,7 @@ public class Semantico implements Constants
                     String classe = "";
                     String tipoid3 = tabelaSimbolos.get(id3);
                     if (tipoid3.equals(INT)) {
-                        classe = "int64";
+                        classe = "Int64";
                     } else if (tipoid3.equals(FLOAT)) {
                         classe = "Double";
                     }
